@@ -1,0 +1,26 @@
+﻿@page "/"
+@using Blog.Models
+@using Microsoft.EntityFrameworkCore
+
+@inject BlogDbContext context;
+
+@rendermode InteractiveServer
+
+<PageTitle>My Blog</PageTitle>
+
+<h4>Posts</h4>
+<ul>
+    @foreach (var post in posts)
+    {
+        <li>@post.Title</li>
+    }
+</ul>
+
+@code {
+    private List<Post> posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await context.Posts.Include(p => p.Replies).ToListAsync();
+    }
+}
